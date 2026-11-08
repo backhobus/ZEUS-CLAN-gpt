@@ -148,6 +148,7 @@
       .hero-note { max-width:350px; font-size:11px; line-height:2; }
       .question { margin-top:25px; }
       .question label { font-size:14px; line-height:1.9; }
+      .age-range-field::placeholder { font-size:clamp(8px,2.35vw,9px); letter-spacing:-.035em; }
       .panel h2 { line-height:1.6; }
       .hero { padding:34px 0 26px; }
       .action-area { gap:9px; }
@@ -222,7 +223,7 @@
 
   <script>
     // Google Apps Script 웹 앱 배포 후 받은 /exec 주소를 여기에 입력하세요.
-    const APPS_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwua-U759D6bJCyrDyq2w-7qmj3QrYJzZ2v1qJg1UQ72sOr8YDd7WaART658lT-N7Nc/exec';
     let backendCallbackSequence = 0;
     const $ = (selector) => document.querySelector(selector);
     const logoFallback = '';
@@ -265,7 +266,7 @@
       const panel = $('#formPanel');
       if (state.step === 6) { renderReview(); return; }
       const q = questionMeta[state.step - 1];
-      const progress = ((state.step - 1) / 4) * 100;
+      const progress = (state.step - 1) * 20;
       let field = '';
       if (q.type === 'textarea') {
         field = `<textarea class="field-area" id="answerField" maxlength="2000" placeholder="${escapeAttribute(q.placeholder)}">${escapeHtml(state.data[q.key])}</textarea>`;
@@ -276,7 +277,7 @@
         </div>`;
       } else {
         const max = q.key === 'uid' ? 16 : (q.key === 'nickname' ? 60 : 30);
-        field = `<input class="field" id="answerField" type="text" maxlength="${max}" autocomplete="off" spellcheck="false" value="${escapeAttribute(state.data[q.key])}" placeholder="${escapeAttribute(q.placeholder)}">`;
+        field = `<input class="field ${q.key === 'ageRange' ? 'age-range-field' : ''}" id="answerField" type="text" maxlength="${max}" autocomplete="off" spellcheck="false" value="${escapeAttribute(state.data[q.key])}" placeholder="${escapeAttribute(q.placeholder)}">`;
       }
       panel.innerHTML = `
         <div class="eyebrow">APPLICATION · ZEUS CLAN</div>
@@ -348,6 +349,10 @@
       }
       if (q.key === 'uid' && !/^[A-NP-Z0-9]{15,16}$/.test(String(value).toUpperCase())) {
         state.errors.uid = '게임 UID를 다시 확인해주세요.';
+        return false;
+      }
+      if (q.key === 'ageRange' && !/[0-9]/.test(String(value))) {
+        state.errors.ageRange = '숫자를 포함해주세요.';
         return false;
       }
       delete state.errors[q.key];
@@ -543,7 +548,7 @@
       const content = $('#galleryContent');
       content.innerHTML = '<div class="empty-gallery">명예의 전당을 불러오는 중입니다.</div>';
       if (!isBackendConfigured()) {
-        content.innerHTML = '<div class="empty-gallery" role="status">관리자 설정이 필요합니다. 잠시 후 다시 이용해 주세요.</div>';
+        content.innerHTML = '<div class="empty-gallery" role="status">관리자 설정이 필요합니다.<br>잠시 후 다시 이용해 주세요.</div>';
         return;
       }
       try {
