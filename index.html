@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#090a0d">
   <title>ZEUS CLAN | 가입 신청</title>
+  <!-- Font Awesome icons for the main menu -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gowun+Batang:wght@400;700&family=Orbitron:wght@500;600;700;800&display=swap');
     :root {
@@ -60,6 +62,20 @@
     .action:before { content:""; position:absolute; inset:0; background:linear-gradient(110deg,transparent 20%,rgba(255,244,189,.08),transparent 76%); transform:translateX(-110%); transition:transform .65s; }
     .action:hover { transform:translateY(-3px); border-color:rgba(255,231,139,.86); box-shadow:0 13px 34px rgba(188,151,52,.13); }
     .action:hover:before { transform:translateX(110%); }
+    /* Discord button: muted brand-blue treatment tuned for the dark ZEUS background. */
+    .action#discordButton {
+      background:linear-gradient(135deg,rgba(88,101,242,.25),rgba(65,76,180,.19) 48%,rgba(17,20,29,.97));
+      border-color:rgba(116,129,255,.48);
+      box-shadow:0 9px 28px rgba(0,0,0,.24),inset 0 1px 0 rgba(174,183,255,.07);
+    }
+    .action#discordButton:before {
+      background:linear-gradient(110deg,transparent 20%,rgba(151,164,255,.13),transparent 76%);
+    }
+    .action#discordButton:hover {
+      border-color:rgba(151,164,255,.88);
+      box-shadow:0 13px 34px rgba(88,101,242,.20),0 0 18px rgba(88,101,242,.08);
+    }
+    .action#discordButton .symbol { color:#9aa4ff; }
     .action.primary { grid-column:1 / -1; min-height:91px; background:linear-gradient(110deg,#4c3d17,#191812 48%,#413516); border-color:#e4c65a; font-size:19px; }
     .action .symbol { color:var(--gold); font-size:21px; line-height:1; }
     .action .arrow { color:#a58e48; font:14px 'Orbitron',sans-serif; }
@@ -160,9 +176,9 @@
       </header>
       <div class="rule"></div>
       <section class="action-area" aria-label="클랜 메뉴">
-        <button class="action primary" id="joinButton" type="button"><span class="symbol">♛</span><span>가입신청서 작성</span><span class="arrow">→</span></button>
-        <button class="action" id="hallButton" type="button"><span class="symbol">✧</span><span>명예의 전당</span></button>
-        <button class="action" id="discordButton" type="button"><span class="symbol">◈</span><span>공식 디스코드</span></button>
+        <button class="action primary" id="joinButton" type="button"><i class="fa-solid fa-file-signature symbol" aria-hidden="true"></i><span>가입신청서 작성</span><span class="arrow">→</span></button>
+        <button class="action" id="hallButton" type="button"><i class="fa-solid fa-trophy symbol" aria-hidden="true"></i><span>명예의 전당</span></button>
+        <button class="action" id="discordButton" type="button"><i class="fa-brands fa-discord symbol" aria-hidden="true"></i><span>공식 디스코드</span></button>
       </section>
       <div class="footer">ZEUS CLAN · ALL RIGHTS RESERVED</div>
     </section>
@@ -185,7 +201,7 @@
 
   <script>
     // Google Apps Script 웹 앱 배포 후 받은 /exec 주소를 여기에 입력하세요.
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwua-U759D6bJCyrDyq2w-7qmj3QrYJzZ2v1qJg1UQ72sOr8YDd7WaART658lT-N7Nc/exec';
+    const APPS_SCRIPT_URL = 'YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL';
     let backendCallbackSequence = 0;
     const $ = (selector) => document.querySelector(selector);
     const logoFallback = '';
