@@ -578,7 +578,7 @@
           return;
         }
         content.innerHTML = '<div class="gallery-grid">' + images.map(item =>
-          `<article class="gallery-card"><img loading="lazy" src="${item.src}" alt="${escapeAttribute(item.name)}"><p>${escapeHtml(item.name)}</p></article>`
+          `<article class="gallery-card"><img loading="lazy" src="${item.src}" alt=""></article>`
         ).join('') + '</div>';
       } catch (error) {
         content.innerHTML = '<div class="empty-gallery">명예의 전당을 불러오지 못했습니다.<br>잠시 후 다시 시도해 주세요.</div>';
