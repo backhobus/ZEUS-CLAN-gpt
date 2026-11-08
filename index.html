@@ -169,7 +169,7 @@
       .action.primary { min-height:80px; font-size:16px; }
       .action .symbol { font-size:18px; }
       .panel { border-radius:15px; }
-      .gallery-grid { grid-template-columns:1fr; }
+      .gallery-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
       .empty-gallery { min-height:96px; padding:25px 12px; font-size:12px; }
       .topline { font-size:8px; }
     }
@@ -238,7 +238,7 @@
 
   <script>
     // Google Apps Script 웹 앱 배포 후 받은 /exec 주소를 여기에 입력하세요.
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwua-U759D6bJCyrDyq2w-7qmj3QrYJzZ2v1qJg1UQ72sOr8YDd7WaART658lT-N7Nc/exec';
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzTnIMfs4aGpEF-ukH36z3NPo834F4iJAAUMwSGLl7POD_cFx7_VjNY2CNSKrD6CjbTgg/exec';
     let backendCallbackSequence = 0;
     const $ = (selector) => document.querySelector(selector);
     const logoFallback = '';
@@ -568,20 +568,37 @@
         return;
       }
       try {
+        // Apps Script가 JSONP로 반환하므로 모바일 Chrome에서도 CORS 응답 읽기 제한을 피합니다.
         const response = await callBackendJsonp('hallOfFame');
-        if (!response || response.success !== true) {
-          throw new Error('명예의 전당 응답 오류');
+        if (!response || !(response.success === true || response.result === 'success')) {
+          throw new Error((response && response.message) || '명예의 전당 응답 오류');
         }
-        const images = response.images || [];
-        if (images.length === 0) {
+
+        // 기존 서버(src)와 Gemini 서버(url) 응답을 모두 지원합니다.
+        const images = Array.isArray(response.images) ? response.images.slice() : [];
+        images.sort((a, b) => {
+          const dateA = Date.parse(a.createdAt || a.dateCreated || '') || 0;
+          const dateB = Date.parse(b.createdAt || b.dateCreated || '') || 0;
+          return dateB - dateA;
+        });
+
+        const validImages = images.map(item => {
+          const src = String((item && (item.src || item.url)) || '').trim();
+          // 갤러리에는 Google Drive 이미지 주소만 삽입합니다.
+          if (!/^https:\/\/(lh3\.googleusercontent\.com\/d\/|drive\.google\.com\/uc\?)/i.test(src)) return null;
+          return { src, name: String(item.name || '') };
+        }).filter(Boolean);
+
+        if (validImages.length === 0) {
           content.innerHTML = '<div class="empty-gallery" role="status">아직 등록된 기록이 없습니다.</div>';
           return;
         }
-        content.innerHTML = '<div class="gallery-grid">' + images.map(item =>
+        content.innerHTML = '<div class="gallery-grid">' + validImages.map(item =>
           `<article class="gallery-card"><img loading="lazy" src="${item.src}" alt=""></article>`
         ).join('') + '</div>';
       } catch (error) {
-        content.innerHTML = '<div class="empty-gallery">명예의 전당을 불러오지 못했습니다.<br>잠시 후 다시 시도해 주세요.</div>';
+        console.error('ZEUS 명예의 전당 조회 오류:', error);
+        content.innerHTML = '<div class="empty-gallery" role="status">명예의 전당을 불러오지 못했습니다.<br>잠시 후 다시 시도해 주세요.</div>';
       }
     }
     function escapeHtml(value) {
