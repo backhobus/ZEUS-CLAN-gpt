@@ -45,11 +45,13 @@
     #stormFlash { position:fixed; inset:0; pointer-events:none; z-index:0; opacity:0; --fx:50%;
       background:radial-gradient(ellipse 85% 70% at var(--fx) 0%, rgba(255,224,90,.55), rgba(214,170,40,.14) 48%, transparent 74%); }
     body.calm .lightning, body.calm #stormCanvas, body.calm #stormFlash { display:none !important; }
-    .shell { position:relative; z-index:1; width:min(100% - 36px, 900px); margin:0 auto; padding:30px 0 56px; }
+    .shell { position:relative; z-index:1; width:min(100% - 36px, 900px); min-height:100svh; margin:0 auto; padding:22px 0 16px; display:flex; flex-direction:column; }
+    .topline { flex:0 0 auto; }
+    #homeView { display:flex; flex:1 1 auto; min-height:0; flex-direction:column; }
     .topline { display:flex; align-items:center; justify-content:space-between; gap:12px; color:#918d7b; font:10px 'Orbitron',sans-serif; letter-spacing:.22em; text-transform:uppercase; }
     .topline .crest { color:var(--gold); }
-    .hero { text-align:center; padding:46px 0 34px; animation:rise .8s ease both; }
-    .logo-wrap { position:relative; width:clamp(150px,30vw,218px); aspect-ratio:1; margin:0 auto 23px; border-radius:50%; padding:5px; background:linear-gradient(145deg,#fff2a1,#a98a32 40%,#fff0a0 70%,#6e5720); box-shadow:0 0 0 1px rgba(255,239,164,.2),0 0 42px rgba(216,185,78,.13); }
+    .hero { text-align:center; padding:24px 0 8px; animation:rise .8s ease both; }
+    .logo-wrap { position:relative; width:clamp(150px,30vw,218px); aspect-ratio:1; margin:0 auto 14px; border-radius:50%; padding:5px; background:linear-gradient(145deg,#fff2a1,#a98a32 40%,#fff0a0 70%,#6e5720); box-shadow:0 0 0 1px rgba(255,239,164,.2),0 0 42px rgba(216,185,78,.13); }
     .logo-wrap:after { content:""; position:absolute; inset:-11px; border:1px solid rgba(240,216,107,.32); border-radius:50%; }
     .logo-wrap img { display:block; width:100%; height:100%; border-radius:50%; object-fit:contain; object-position:50% 50%; }
     .since { display:inline-flex; align-items:center; gap:12px; color:var(--gold); font:700 13px 'Cinzel','Times New Roman',serif; letter-spacing:.33em; }
@@ -57,14 +59,14 @@
     .since:after { transform:scaleX(-1); }
     .hero .since { font-family:'Cinzel','Trajan Pro','Times New Roman',serif !important; font-weight:700; font-size:14px; }
     h1 { margin:12px 0 7px; font:clamp(35px,8vw,67px) 'Orbitron',sans-serif; font-weight:800; line-height:1.02; letter-spacing:.075em; color:#f5e9b2; text-shadow:0 3px 20px rgba(240,216,107,.18); }
-    .subtitle { width:min(100%,420px); margin:12px auto 0; padding:0 8px; color:#d8d0ae; font-size:clamp(13px,2.7vw,17px); letter-spacing:.025em; line-height:1.65; }
+    .subtitle { width:min(100%,420px); margin:8px auto 0; padding:0 8px; color:#d8d0ae; font-size:clamp(13px,2.7vw,17px); letter-spacing:.025em; line-height:1.65; }
     .subtitle strong { color:#89877e; font-weight:700; }
     .subtitle .hero-word { color:var(--gold); }
     .subtitle .legend-word { color:#b68cff; }
     .hero-note { display:block; width:min(100%,470px); margin:21px auto 0; padding:0 12px; color:#89877e; font-size:11px; letter-spacing:.045em; line-height:1.9; text-align:center; }
     .hero-note span { color:var(--gold-2); display:inline-block; margin:0 4px; }
-    .rule { height:1px; margin:18px auto 31px; width:min(100%,560px); background:linear-gradient(90deg,transparent,rgba(240,216,107,.55),transparent); }
-    .action-area { width:min(100%,650px); margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:13px; }
+    .rule { height:1px; margin:8px auto 14px; width:min(100%,560px); background:linear-gradient(90deg,transparent,rgba(240,216,107,.55),transparent); }
+    .action-area { width:min(100%,650px); margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:10px 13px; }
     .action {
       position:relative; min-height:76px; overflow:hidden; border:1px solid rgba(240,216,107,.38); border-radius:13px;
       background:linear-gradient(135deg,rgba(32,31,27,.96),rgba(16,18,23,.96)); color:var(--cream);
@@ -92,8 +94,35 @@
     .action.primary { grid-column:1 / -1; min-height:91px; background:linear-gradient(110deg,#4c3d17,#191812 48%,#413516); border-color:#e4c65a; font-size:19px; }
     .action .symbol { color:var(--gold); font-size:21px; line-height:1; }
     .action .arrow { color:#a58e48; font:14px 'Orbitron',sans-serif; }
-    .footer { margin:40px auto 0; text-align:center; color:#5e5f62; font:9px 'Orbitron',sans-serif; letter-spacing:.24em; }
-    .view { animation:rise .35s ease both; }
+    .footer { flex:0 0 auto; margin:12px auto 0; padding-top:8px; text-align:center; color:#5e5f62; font:9px 'Orbitron',sans-serif; letter-spacing:.24em; }
+    .view { min-width:0; }
+    .view.view-enter { animation:viewEnter .34s cubic-bezier(.22,1,.36,1) both; }
+    .step-enter { animation:stepEnter .28s cubic-bezier(.22,1,.36,1) both; }
+    .shell.is-home { height:100svh; min-height:100svh; overflow:hidden; }
+    .shell.is-gallery { height:100svh; min-height:100svh; overflow:hidden; }
+    .shell.is-gallery #galleryView { display:flex; flex:1 1 auto; min-height:0; flex-direction:column; overflow:hidden; }
+    .shell.is-gallery #galleryView .back-home { flex:0 0 auto; align-self:flex-start; width:min(100%,680px); margin:0 auto; }
+    .shell.is-gallery #galleryView .panel { flex:0 1 auto; width:min(100%,680px); max-height:calc(100% - 38px); margin:auto; overflow-y:auto; scrollbar-width:thin; }
+    body.home-active, body.gallery-active, body.form-active { height:100svh; min-height:100svh; overflow:hidden; }
+    .shell.is-form { height:var(--app-viewport-height,100svh); min-height:var(--app-viewport-height,100svh); overflow:hidden; padding-top:max(10px,env(safe-area-inset-top)); padding-bottom:max(8px,env(safe-area-inset-bottom)); }
+    .shell.is-form #formView { display:flex; flex:1 1 auto; min-height:0; flex-direction:column; justify-content:center; align-items:center; overflow:hidden; }
+    .shell.is-form #formView .back-home { flex:0 0 auto; width:min(100%,680px); align-self:center; margin:0 auto; padding:4px 0; text-align:left; }
+    .shell.is-form #formPanel { flex:0 1 auto; width:min(100%,680px); min-height:0; max-height:calc(100% - 38px); margin:6px auto 0; padding:clamp(14px,2.1vh,24px) clamp(18px,3vw,30px); overflow-y:auto; scrollbar-width:thin; }
+    .shell.is-form .progress-row { margin:10px 0 8px; }
+    .shell.is-form .question { margin-top:16px; }
+    .shell.is-form .question label { margin-bottom:clamp(7px,1.4vh,12px); line-height:1.55; }
+    .shell.is-form .field,.shell.is-form .field-area { padding:10px 13px; }
+    .shell.is-form .field { min-height:46px; }
+    .shell.is-form .field-area { min-height:clamp(82px,13vh,112px); resize:none; }
+    .shell.is-form .nav-row { margin-top:16px; }
+    .shell.is-form .nav-btn { min-height:46px; }
+    .shell.is-form .footer { margin-top:6px; padding-top:4px; font-size:8px; letter-spacing:.16em; }
+    .shell.is-form #formPanel:has(.review-list) { padding-top:14px; padding-bottom:14px; }
+    .shell.is-form .review-list { margin-top:14px; }
+    .shell.is-form .review-item { padding:9px 0; }
+    .shell.is-form .submit-btn { margin-top:14px; }
+    body.form-active { overflow:hidden; }
+    body.keyboard-open .shell.is-form #formPanel { overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; }
     .hidden { display:none !important; }
     .back-home { display:inline-flex; align-items:center; gap:8px; padding:8px 0; color:#a9a18a; background:none; border:0; cursor:pointer; font:12px 'Gowun Batang',serif; }
     .back-home:hover { color:var(--gold); }
@@ -122,6 +151,7 @@
     .choice:hover { border-color:#a58e48; }
     .choice.selected { color:#17150e; border-color:#e8cf70; background:linear-gradient(125deg,#f3df8b,#c6a648); box-shadow:0 5px 20px rgba(208,174,71,.13); }
     .nav-row { display:grid; grid-template-columns:1fr 9fr; gap:10px; margin-top:28px; }
+    .nav-row.first-step { grid-template-columns:minmax(0,1fr); }
     .nav-btn,.submit-btn { min-height:53px; border-radius:10px; cursor:pointer; font:700 14px 'Gowun Batang',serif; transition:.2s; }
     .nav-btn.prev { color:#a9a493; background:#17191e; border:1px solid #393a40; }
     .nav-btn.prev:disabled { opacity:.38; cursor:not-allowed; }
@@ -142,6 +172,7 @@
     .completion p { max-width:420px; margin:0 auto; color:#bab5a2; font-size:13px; line-height:2; }
     .completion .small { margin-top:22px; color:#77766e; font-size:11px; }
     .gallery-title { text-align:center; margin:8px 0 24px; line-height:1.8; }
+    .gallery-title .gallery-heading { color:var(--gold-2); font:clamp(22px,5vw,30px) 'Orbitron',sans-serif; letter-spacing:.2em; line-height:1.55; }
     .gallery-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:13px; }
     .gallery-card { border:1px solid rgba(240,216,107,.24); border-radius:12px; overflow:hidden; background:#090b0f; }
     .gallery-card img { display:block; width:100%; aspect-ratio:4/3; object-fit:cover; }
@@ -152,6 +183,8 @@
     .toast.warning { border-color:rgba(255,107,107,.6); }
     .loader { display:inline-block; width:14px; height:14px; border:2px solid rgba(0,0,0,.25); border-top-color:#16140d; border-radius:50%; animation:spin .7s linear infinite; vertical-align:middle; margin-right:8px; }
     @keyframes rise { from { opacity:0; transform:translateY(11px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes viewEnter { from { opacity:0; transform:translateY(9px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes stepEnter { from { opacity:.72; transform:translateX(12px); } to { opacity:1; transform:translateX(0); } }
     @keyframes spin { to { transform:rotate(360deg); } }
     @media (max-width:520px) {
       .shell { width:min(100% - 28px,900px); padding-top:20px; }
@@ -172,6 +205,76 @@
       .gallery-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
       .empty-gallery { min-height:96px; padding:25px 12px; font-size:12px; }
       .topline { font-size:8px; }
+      .shell { padding-top:14px; padding-bottom:12px; }
+      .hero { padding:clamp(18px,4vh,34px) 0 18px; }
+      .logo-wrap { width:clamp(112px,24vh,170px); margin-bottom:15px; }
+      .rule { margin:12px auto 19px; }
+      .footer { margin-top:8px; font-size:7px; letter-spacing:.16em; }
+      .shell.is-form { width:min(100% - 24px,900px); }
+      .shell.is-form #formPanel { padding:clamp(12px,2.2vh,20px) 16px; }
+      .shell.is-form .panel h2 { margin-top:6px; }
+      .shell.is-form .question label { font-size:13px; }
+      .shell.is-form .field-area { min-height:clamp(90px,15vh,125px); }
+    }
+    @media (min-width:768px) {
+      .action-area { width:min(100%,740px); }
+      .action { padding-left:24px; padding-right:24px; }
+      .action.primary { min-height:96px; }
+    }
+    @media (max-height:700px) {
+      .shell.is-home { padding:8px 0; }
+      .shell.is-home .hero { padding:8px 0 8px; }
+      .shell.is-home .logo-wrap { width:clamp(96px,20vh,140px); margin-bottom:9px; }
+      .shell.is-home h1 { font-size:clamp(32px,7vh,48px); margin:8px 0 4px; }
+      .shell.is-home .subtitle { margin-top:6px; font-size:12px; line-height:1.55; }
+      .shell.is-home .rule { margin:8px auto 12px; }
+      .shell.is-home .action { min-height:56px; padding:9px 12px; }
+      .shell.is-home .action.primary { min-height:66px; font-size:16px; }
+      .shell.is-home .footer { margin-top:4px; padding-top:2px; }
+      .shell.is-form { padding-top:7px; padding-bottom:6px; }
+      .shell.is-form .topline { font-size:7px; }
+      .shell.is-form #formView .back-home { padding:1px 0; }
+      .shell.is-form #formPanel { padding:10px 14px; }
+      .shell.is-form .progress-row { margin:7px 0 6px; }
+      .shell.is-form .question { margin-top:10px; }
+      .shell.is-form .question label { margin-bottom:6px; font-size:13px; }
+      .shell.is-form .field { min-height:43px; }
+      .shell.is-form .field-area { min-height:82px; }
+      .shell.is-form .nav-row { margin-top:10px; }
+      .shell.is-form .nav-btn { min-height:43px; }
+      .shell.is-form .footer { margin-top:3px; }
+    }
+
+    @media (max-width:520px) {
+      .shell.is-home { width:min(100% - 24px,900px); padding-top:9px; padding-bottom:7px; }
+      .shell.is-home .hero { padding:clamp(8px,1.5svh,14px) 0 7px; }
+      .shell.is-home .logo-wrap { width:clamp(96px,18svh,142px); margin-bottom:9px; }
+      .shell.is-home .hero .since { font-size:12px; }
+      .shell.is-home h1 { margin:7px 0 3px; font-size:clamp(31px,8vw,42px); line-height:1.04; }
+      .shell.is-home .subtitle { margin-top:5px; font-size:12px; line-height:1.45; }
+      .shell.is-home .rule { margin:6px auto 9px; }
+      .shell.is-home .action-area { gap:7px; }
+      .shell.is-home .action { min-height:55px; padding:8px 7px; }
+      .shell.is-home .action.primary { min-height:63px; font-size:15px; }
+      .shell.is-home .footer { margin-top:auto; padding-top:4px; font-size:6px; letter-spacing:.12em; }
+      .shell.is-form #formView .back-home { padding:2px 0; }
+      .shell.is-form #formPanel { width:min(100%,680px); max-height:calc(100% - 30px); padding:12px 14px; }
+      .shell.is-form .progress-row { margin:7px 0 6px; }
+      .shell.is-form .question { margin-top:11px; }
+      .shell.is-form .question label { font-size:13px; margin-bottom:7px; }
+      .shell.is-form .field-area { min-height:clamp(78px,12svh,100px); }
+      .shell.is-form .nav-row { margin-top:11px; }
+      .shell.is-gallery #galleryView .panel { max-height:calc(100% - 30px); padding:18px; }
+    }
+    @media (max-height:700px) {
+      .shell.is-home .hero { padding:6px 0 5px; }
+      .shell.is-home .logo-wrap { width:clamp(88px,16svh,118px); margin-bottom:7px; }
+      .shell.is-home h1 { margin:5px 0 2px; font-size:clamp(29px,6.5svh,42px); }
+      .shell.is-home .subtitle { margin-top:4px; font-size:11px; line-height:1.35; }
+      .shell.is-home .rule { margin:5px auto 7px; }
+      .shell.is-home .action { min-height:49px; padding:7px 6px; }
+      .shell.is-home .action.primary { min-height:56px; font-size:14px; }
+      .shell.is-home .footer { font-size:5.5px; }
     }
 
     /* 화면의 텍스트·이미지 선택 및 모바일 길게 누르기 메뉴 제한. 신청서 입력란은 예외. */
@@ -192,16 +295,73 @@
       -webkit-user-drag:none;
       user-drag:none;
     }
+    @media (max-width:520px) {
+      body.form-active .shell.is-form #formPanel { scrollbar-width:none; }
+      body.form-active .shell.is-form #formPanel::-webkit-scrollbar { display:none; }
+    }
+    /* 3차 화면 배치 조정: 명예의 전당 상단 버튼을 패널 왼쪽 모서리에 정렬 */
+    .shell.is-gallery #galleryView {
+      align-items:center;
+      justify-content:center;
+    }
+    .shell.is-gallery #galleryView > .back-home {
+      align-self:center;
+      width:min(100%,680px);
+      margin:0 auto 5px;
+      padding:4px 0;
+      text-align:left;
+    }
+    .shell.is-gallery #galleryView > .panel {
+      flex:0 1 auto;
+      margin:0 auto;
+    }
+
+    /* 모바일 첫 화면: 상단 문구와 로고의 간격을 확보하고 메뉴를 2:1:1 두 줄로 구성 */
+    @media (max-width:520px) {
+      .shell.is-home .topline { margin-bottom:8px; }
+      .shell.is-home .hero { padding:clamp(22px,4.2svh,30px) 0 7px; }
+      .shell.is-home .logo-wrap { width:clamp(94px,16svh,130px); margin-bottom:9px; }
+
+      /* 첫 번째 버튼은 전체 폭, 아래 두 버튼은 각각 절반 폭 */
+      .shell.is-home .action-area {
+        width:100%;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:10px;
+      }
+      .shell.is-home .action,
+      .shell.is-home .action.primary {
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        grid-column:auto;
+        width:100%;
+        min-width:0;
+        min-height:clamp(108px,16svh,138px);
+        gap:11px;
+        padding:13px 8px;
+        font-size:clamp(12px,3.3vw,15px);
+        line-height:1.45;
+      }
+      .shell.is-home .action.primary {
+        grid-column:1 / -1;
+        min-height:clamp(116px,17svh,148px);
+        font-size:16px;
+      }
+      .shell.is-home .action .symbol { font-size:25px; }
+      .shell.is-home .action .arrow { display:none; }
+    }
+
     @media (prefers-reduced-motion:reduce) { *,*:before,*:after { animation-duration:.01ms !important; transition-duration:.01ms !important; scroll-behavior:auto !important; } }
   </style>
 </head>
-<body>
+<body class="home-active">
   <canvas id="stormCanvas" aria-hidden="true"></canvas>
   <div id="stormFlash" aria-hidden="true"></div>
   <svg class="lightning left" viewBox="0 0 300 420" aria-hidden="true"><path d="M170 4 L126 108 L165 118 L72 244 L122 248 L52 398"/><path d="M170 4 L126 108 L165 118 L72 244 L122 248 L52 398" transform="translate(18 7)" opacity=".5"/></svg>
   <svg class="lightning right" viewBox="0 0 300 420" aria-hidden="true"><path d="M170 4 L126 108 L165 118 L72 244 L122 248 L52 398"/><path d="M170 4 L126 108 L165 118 L72 244 L122 248 L52 398" transform="translate(18 7)" opacity=".5"/></svg>
 
-  <main class="shell">
+  <main class="shell is-home">
     <div class="topline"><span class="crest">⚡ZEUS CLAN</span><span>SUPERIOR CAPTAIN'S FLEET</span></div>
 
     <section id="homeView" class="view">
@@ -217,7 +377,6 @@
         <button class="action" id="hallButton" type="button"><i class="fa-solid fa-trophy symbol" aria-hidden="true"></i><span>명예의 전당</span></button>
         <button class="action" id="discordButton" type="button"><i class="fa-brands fa-discord symbol" aria-hidden="true"></i><span>공식 디스코드</span></button>
       </section>
-      <div class="footer">ZEUS CLAN · ALL RIGHTS RESERVED</div>
     </section>
 
     <section id="formView" class="view hidden">
@@ -228,11 +387,12 @@
     <section id="galleryView" class="view hidden">
       <button class="back-home" type="button" id="galleryBack">← 메인으로</button>
       <div class="panel">
-        <div class="gallery-title"><div class="eyebrow">HALL OF FAME</div><h2>명예의 전당</h2><p class="description">ZEUS의 이름을 빛낸 함장들의 기록</p></div>
+        <div class="gallery-title"><div class="eyebrow gallery-heading">HALL OF FAME</div><p class="description">ZEUS의 이름을 빛낸 함장들의 기록</p></div>
         <div id="galleryContent"><div class="empty-gallery">명예의 전당을 불러오는 중입니다.</div></div>
       </div>
     </section>
 
+    <div class="footer">ZEUS CLAN · ALL RIGHTS RESERVED</div>
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
   </main>
 
@@ -242,13 +402,36 @@
     let backendCallbackSequence = 0;
     const $ = (selector) => document.querySelector(selector);
     const logoFallback = '';
+    const DRAFT_STORAGE_KEY = 'zeusClanApplicationDraftV1';
+    const emptyApplicationData = () => ({ nickname:'', uid:'', ageRange:'', reason:'', tournament:'' });
     const state = {
       step: 1,
       progressStart: 0,
-      data: { nickname:'', uid:'', ageRange:'', reason:'', tournament:'' },
+      data: emptyApplicationData(),
       errors: {},
-      submitting: false
+      submitting: false,
+      hasDraft: false
     };
+    try {
+      const savedDraft = JSON.parse(sessionStorage.getItem(DRAFT_STORAGE_KEY) || 'null');
+      if (savedDraft && savedDraft.data && typeof savedDraft.data === 'object') {
+        state.data = { ...emptyApplicationData(), ...savedDraft.data };
+        state.step = Math.min(6, Math.max(1, Number(savedDraft.step) || 1));
+        state.progressStart = Math.min(100, Math.max(0, Number(savedDraft.progressStart) || 0));
+        state.hasDraft = true;
+      }
+    } catch (error) { console.warn('임시 저장 내용을 불러오지 못했습니다.', error); }
+
+    function persistDraft() {
+      try {
+        sessionStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify({ step:state.step, data:state.data, progressStart:state.progressStart }));
+        state.hasDraft = true;
+      } catch (error) { console.warn('신청서 임시 저장에 실패했습니다.', error); }
+    }
+    function clearDraft() {
+      try { sessionStorage.removeItem(DRAFT_STORAGE_KEY); } catch (error) {}
+      state.hasDraft = false;
+    }
     const questionMeta = [
       { key:'nickname', title:'게임에서 사용하는 닉네임을 알려주세요.', type:'text', placeholder:'게임 닉네임을 입력해 주세요.' },
       { key:'uid', title:'게임 UID를 알려주세요.', type:'text', placeholder:'예: 428BCBA023C04781' },
@@ -259,9 +442,57 @@
 
     function showView(viewId) {
       ['homeView','formView','galleryView'].forEach(id => $('#'+id).classList.toggle('hidden', id !== viewId));
+      const shell = $('.shell');
+      const activeView = $('#'+viewId);
+      shell.classList.toggle('is-form', viewId === 'formView');
+      shell.classList.toggle('is-home', viewId === 'homeView');
+      shell.classList.toggle('is-gallery', viewId === 'galleryView');
+      document.body.classList.toggle('home-active', viewId === 'homeView');
+      document.body.classList.toggle('gallery-active', viewId === 'galleryView');
+      document.body.classList.toggle('form-active', viewId === 'formView');
+      if (viewId !== 'formView') document.body.classList.remove('keyboard-open');
+      if (activeView) {
+        activeView.classList.remove('view-enter');
+        void activeView.offsetWidth;
+        activeView.classList.add('view-enter');
+      }
       if (window.setStormActive) window.setStormActive(viewId === 'homeView');
-      window.scrollTo({ top:0, behavior:'smooth' });
+      if (viewId !== 'formView') window.scrollTo({ top:0, behavior:'smooth' });
+      syncApplicationViewport();
     }
+    function animatePanel(panel) {
+      panel.classList.remove('step-enter');
+      void panel.offsetWidth;
+      panel.classList.add('step-enter');
+      panel.addEventListener('animationend', () => panel.classList.remove('step-enter'), { once:true });
+    }
+    function centerFocusedField() {
+      const panel = $('#formPanel');
+      const active = document.activeElement;
+      if (!panel || !active || !panel.contains(active)) return;
+      const panelRect = panel.getBoundingClientRect();
+      const fieldRect = active.getBoundingClientRect();
+      const offset = (fieldRect.top + fieldRect.height / 2) - (panelRect.top + panelRect.height / 2);
+      panel.scrollBy({ top:offset, behavior:'smooth' });
+    }
+    let applicationBaseViewportHeight = window.innerHeight;
+    function syncApplicationViewport() {
+      const viewport = window.visualViewport;
+      if (!document.body.classList.contains('form-active')) applicationBaseViewportHeight = window.innerHeight;
+      const height = viewport ? viewport.height : window.innerHeight;
+      document.documentElement.style.setProperty('--app-viewport-height', `${height}px`);
+      const wasKeyboardOpen = document.body.classList.contains('keyboard-open');
+      const keyboardOpen = document.body.classList.contains('form-active') && viewport && (applicationBaseViewportHeight - viewport.height > 110 || viewport.height < applicationBaseViewportHeight * .78);
+      document.body.classList.toggle('keyboard-open', Boolean(keyboardOpen));
+      if (keyboardOpen) requestAnimationFrame(centerFocusedField);
+      else if (wasKeyboardOpen) { const panel = $('#formPanel'); if (panel) panel.scrollTop = 0; }
+    }
+    if (window.visualViewport) window.visualViewport.addEventListener('resize', syncApplicationViewport);
+    window.addEventListener('resize', syncApplicationViewport);
+    document.addEventListener('focusin', event => {
+      if (!document.body.classList.contains('form-active')) return;
+      if (document.body.classList.contains('keyboard-open')) requestAnimationFrame(centerFocusedField);
+    });
     function toast(message, warning=false) {
       const el = $('#toast');
       el.textContent = message;
@@ -271,10 +502,12 @@
       toast.timer = setTimeout(() => el.classList.remove('show'), 3300);
     }
     function startApplication() {
-      state.step = 1;
-      state.progressStart = 0;
+      if (!state.hasDraft) {
+        state.step = 1;
+        state.progressStart = 0;
+        state.data = emptyApplicationData();
+      }
       state.errors = {};
-      state.data = { nickname:'', uid:'', ageRange:'', reason:'', tournament:'' };
       showView('formView');
       renderStep();
     }
@@ -282,7 +515,7 @@
       const panel = $('#formPanel');
       if (state.step === 6) { renderReview(); return; }
       const q = questionMeta[state.step - 1];
-      const progress = (state.step - 1) * 20;
+      const progress = ((state.step - 1) / 4) * 100;
       let field = '';
       if (q.type === 'textarea') {
         field = `<textarea class="field-area" id="answerField" maxlength="2000" placeholder="${escapeAttribute(q.placeholder)}">${escapeHtml(state.data[q.key])}</textarea>`;
@@ -305,10 +538,11 @@
           <div class="error" id="fieldError">${escapeHtml(state.errors[q.key] || '')}</div>
           ${q.helper ? `<p class="description">${q.helper}</p>` : ''}
         </div>
-        <div class="nav-row">
-          <button class="nav-btn prev" id="prevButton" type="button" ${state.step===1?'disabled':''}>이전</button>
+        <div class="nav-row ${state.step===1?'first-step':''}">
+          ${state.step > 1 ? '<button class="nav-btn prev" id="prevButton" type="button">이전</button>' : ''}
           <button class="nav-btn next" id="nextButton" type="button">다음</button>
         </div>`;
+      animatePanel(panel);
 
       const progressFill = $('#progressFill');
       if (progressFill) {
@@ -337,18 +571,22 @@
             state.data[q.key] = input.value;
           }
           clearCurrentError(q.key);
+          persistDraft();
         });
         input.addEventListener('focus', () => clearCurrentError(q.key));
       }
       panel.querySelectorAll('[data-choice]').forEach(button => button.addEventListener('click', () => {
         state.data.tournament = button.dataset.choice;
         clearCurrentError('tournament');
+        persistDraft();
         renderStep();
         $('#nextButton').focus({preventScroll:true});
       }));
-      $('#prevButton').addEventListener('click', () => { if (state.step > 1) { state.step--; state.errors = {}; renderStep(); } });
+      const prevButton = $('#prevButton');
+      if (prevButton) prevButton.addEventListener('click', () => { if (state.step > 1) { state.step--; state.errors = {}; state.progressStart = ((state.step - 1) / 4) * 100; persistDraft(); renderStep(); } });
       $('#nextButton').addEventListener('click', goNext);
-      if (state.step === 1 && input) input.focus({preventScroll:true});
+      // 데스크톱에서는 입력 편의를 위해 포커스하되, 모바일에서는 자동으로 키보드가 열리지 않게 합니다.
+      if (input && window.matchMedia('(hover:hover) and (pointer:fine)').matches) input.focus({preventScroll:true});
     }
     function clearCurrentError(key) {
       if (!state.errors[key]) return;
@@ -381,6 +619,7 @@
         return;
       }
       state.step++;
+      persistDraft();
       renderStep();
     }
     function renderReview() {
@@ -398,10 +637,12 @@
           <div class="review-item"><div><div class="label">${row[0]}</div><div class="answer">${escapeHtml(row[1])}</div></div><button class="edit-btn" type="button" data-edit="${row[2]}">수정</button></div>
         `).join('')}</div>
         <button class="submit-btn" id="submitButton" type="button">가입 신청하기</button>`;
+      animatePanel(panel);
       panel.querySelectorAll('[data-edit]').forEach(button => button.addEventListener('click', () => {
         state.progressStart = 100;
         state.step = Number(button.dataset.edit) + 1;
         state.errors = {};
+        persistDraft();
         renderStep();
       }));
       $('#submitButton').addEventListener('click', submitForm);
@@ -421,6 +662,7 @@
         const result = await submitApplicationThroughBackend(payload);
         state.submitting = false;
         renderCompletion();
+        clearDraft();
         if (result && result.emailSent === false) {
           console.warn('신청은 저장되었으나 운영진 이메일 알림은 전송되지 않았습니다.');
         }
@@ -557,6 +799,7 @@
           <p class="small">ZEUS CLAN · YOUR LEGEND BEGINS</p>
           <button class="submit-btn" id="completeHome" type="button">메인으로 돌아가기</button>
         </div>`;
+      animatePanel($('#formPanel'));
       $('#completeHome').addEventListener('click', () => showView('homeView'));
     }
     async function loadHallOfFame() {
@@ -601,18 +844,21 @@
     $('#joinButton').addEventListener('click', startApplication);
     $('#hallButton').addEventListener('click', loadHallOfFame);
     $('#discordButton').addEventListener('click', () => window.open('https://discord.gg/Bd79ZUXdm2','_blank','noopener,noreferrer'));
-    $('#formBack').addEventListener('click', () => showView('homeView'));
+    $('#formBack').addEventListener('click', () => { persistDraft(); showView('homeView'); });
     $('#galleryBack').addEventListener('click', () => showView('homeView'));
+    syncApplicationViewport();
 
-    // 가입 신청서에서 Enter를 누르면 '다음' 버튼과 같은 동작을 수행합니다.
-    // 서술형 답변에서 Shift+Enter를 누르면 줄바꿈을 입력할 수 있습니다.
+    // 일반 입력란은 Enter로 다음 단계 이동, 가입 사유 textarea는 Enter로 줄바꿈합니다.
+    // 가입 사유 textarea에서 Ctrl+Enter(또는 macOS의 Command+Enter)는 다음 단계로 이동합니다.
     // 한글 조합 중 Enter는 가로채지 않아 입력이 끊기지 않도록 합니다.
     $('#formPanel').addEventListener('keydown', event => {
       if (event.key !== 'Enter' || event.isComposing || event.keyCode === 229) return;
       const target = event.target;
 
       if (target.matches('#answerField')) {
-        if (target.tagName === 'TEXTAREA' && event.shiftKey) return;
+        if (target.tagName === 'TEXTAREA') {
+          if (!(event.ctrlKey || event.metaKey)) return;
+        }
         event.preventDefault();
         goNext();
         return;
