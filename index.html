@@ -325,7 +325,7 @@
     @media (max-width:520px) {
       .shell.is-home .topline { margin-bottom:8px; }
       .shell.is-home .hero { padding:clamp(22px,4.2svh,30px) 0 7px; }
-      .shell.is-home .logo-wrap { width:clamp(94px,16svh,130px); margin-bottom:9px; }
+      .shell.is-home .logo-wrap { width:clamp(142px,21svh,176px); margin-bottom:11px; }
 
       /* 첫 번째 버튼은 전체 폭, 아래 두 버튼은 각각 절반 폭 */
       .shell.is-home .action-area {
@@ -355,6 +355,23 @@
       }
       .shell.is-home .action .symbol { font-size:25px; }
       .shell.is-home .action .arrow { display:none; }
+
+      /* 모바일 메인: 로고 세트와 버튼 세트를 하나의 묶음으로 화면 중앙에 배치 */
+      .shell.is-home #homeView {
+        justify-content:center;
+      }
+      .shell.is-home .hero {
+        flex:0 0 auto;
+      }
+      .shell.is-home .action-area {
+        margin:0 auto;
+      }
+      .shell.is-form,
+      .shell.is-gallery {
+        width:min(100% - 24px,900px);
+        padding-top:9px;
+      }
+      .shell.is-form .topline { font-size:8px; }
     }
 
     /* 데스크톱: 왼쪽 브랜드 영역은 유지하고 오른쪽 작업 영역만 전환 */
