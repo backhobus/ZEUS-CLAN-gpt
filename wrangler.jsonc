@@ -4,6 +4,6 @@
   "pages_build_output_dir": "./public",
   "compatibility_date": "2026-11-10",
   "vars": {
-    "ZEUS_ALLOWED_ORIGIN": "https://zeus-clan-gpt.backhobus.workers.dev"
+    "ZEUS_ALLOWED_ORIGIN": "https://zeus-clan-gpt.backhobus.pages.dev"
   }
 }
