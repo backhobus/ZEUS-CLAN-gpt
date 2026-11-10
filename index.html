@@ -557,7 +557,10 @@
 
   <script>
     // Google Apps Script 웹 앱 배포 후 받은 /exec 주소를 여기에 입력하세요.
+    // Apps Script는 명예의 전당 조회와 신청 처리 상태 확인에 계속 사용합니다.
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwua-U759D6bJCyrDyq2w-7qmj3QrYJzZ2v1qJg1UQ72sOr8YDd7WaART658lT-N7Nc/exec';
+    // Cloudflare Worker 배포 후 실제 workers.dev 주소로 바꾸세요. 주소 끝의 /submit도 필요합니다.
+    const CLOUDFLARE_WORKER_URL = 'https://YOUR-WORKER.YOUR-SUBDOMAIN.workers.dev/submit';
     let backendCallbackSequence = 0;
     const $ = (selector) => document.querySelector(selector);
     const logoFallback = '';
@@ -801,7 +804,7 @@
         ['토너먼트 도전 의향',state.data.tournament,4]
       ];
       panel.innerHTML = `
-        <div class="review-head"><div class="eyebrow">FINAL CHECK</div><h2>마지막으로 확인해주세요.</h2><p class="description">작성하신 내용이 맞는지 확인한 뒤 가입 신청을 완료해 주세요.</p></div>
+        <div class="review-head"><div class="eyebrow">FINAL CHECK</div><h2>마지막으로 확인해주세요.</h2><p class="description">작성하신 내용이 맞는지 확인한 뒤 가입 신청을 완료해 주세요.</p><p class="description">신청 제출 시 중복 신청 및 부정 이용 방지를 위해 IP 주소와 운영체제(OS), 브라우저가 제공하는 기종 정보도 함께 저장됩니다. 기종은 브라우저 환경에 따라 확인되지 않을 수 있습니다.</p></div>
         <div class="review-list">${rows.map(row => `
           <div class="review-item"><div><div class="label">${row[0]}</div><div class="answer">${escapeHtml(row[1])}</div></div><button class="edit-btn" type="button" data-edit="${row[2]}">수정</button></div>
         `).join('')}</div>
@@ -818,16 +821,20 @@
     }
     async function submitForm() {
       if (state.submitting) return;
-      if (!isBackendConfigured()) {
-        toast('관리자 설정이 필요합니다. 배포 주소를 확인해 주세요.', true);
+      if (!isBackendConfigured() || !isWorkerConfigured()) {
+        toast('관리자 설정이 필요합니다. Apps Script와 Cloudflare Worker 주소를 확인해 주세요.', true);
         return;
       }
       state.submitting = true;
       const button = $('#submitButton');
       button.disabled = true;
       button.innerHTML = '<span class="loader"></span>신청 내용 확인 중';
-      const payload = { ...state.data };
       try {
+        // 이 정보 수집 함수는 최종 신청 버튼을 누를 때만 실행됩니다.
+        const payload = {
+          ...state.data,
+          clientInfo: await collectClientDeviceInfo()
+        };
         const result = await submitApplicationThroughBackend(payload);
         state.submitting = false;
         renderCompletion();
@@ -845,6 +852,68 @@
 
     function isBackendConfigured() {
       return /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_-]+\/exec$/.test(APPS_SCRIPT_URL);
+    }
+
+    function isWorkerConfigured() {
+      return /^https:\/\//i.test(CLOUDFLARE_WORKER_URL) &&
+        !CLOUDFLARE_WORKER_URL.includes('YOUR-WORKER') &&
+        !CLOUDFLARE_WORKER_URL.includes('YOUR-SUBDOMAIN') &&
+        /\/submit$/.test(CLOUDFLARE_WORKER_URL);
+    }
+
+    /** 지원하는 Chromium 계열에서는 기기 모델 Client Hint를 우선 사용하고, 나머지는 식별 가능한 범위만 기록합니다. */
+    async function collectClientDeviceInfo() {
+      const ua = navigator.userAgent || '';
+      const uaData = navigator.userAgentData || null;
+      let platform = uaData && uaData.platform ? uaData.platform : '';
+      let platformVersion = '';
+      let model = '';
+      let isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(ua);
+
+      if (uaData) {
+        isMobile = !!uaData.mobile;
+        try {
+          const highEntropy = await uaData.getHighEntropyValues([
+            'model', 'platform', 'platformVersion'
+          ]);
+          platform = highEntropy.platform || platform;
+          platformVersion = highEntropy.platformVersion || '';
+          model = highEntropy.model || '';
+        } catch (error) {
+          // 브라우저가 고엔트로피 Client Hints를 지원하지 않거나 제공하지 않으면 아래의 보수적 추정값을 사용합니다.
+        }
+      }
+
+      const platformText = String(platform || '').toLowerCase();
+      let os = '확인 불가';
+      if (platformText.includes('android') || /Android/i.test(ua)) {
+        const version = String(platformVersion || '').split('.')[0];
+        os = version ? `Android ${version}` : 'Android';
+      } else if (platformText === 'ios' || /iPhone|iPad|iPod/i.test(ua)) {
+        const match = ua.match(/OS (\d+)[_.](\d+)/i);
+        os = match ? `iOS ${match[1]}.${match[2]}` : 'iOS';
+      } else if (platformText.includes('windows') || /Windows NT/i.test(ua)) {
+        os = 'Windows';
+      } else if (platformText.includes('mac') || /Macintosh|Mac OS X/i.test(ua)) {
+        os = 'macOS';
+      } else if (platformText.includes('chrome') || /CrOS/i.test(ua)) {
+        os = 'ChromeOS';
+      } else if (platformText.includes('linux') || /Linux/i.test(ua)) {
+        os = 'Linux';
+      }
+
+      if (!model) {
+        if (/iPhone/i.test(ua)) model = 'iPhone (세부 모델 미제공)';
+        else if (/iPad/i.test(ua)) model = 'iPad (세부 모델 미제공)';
+        else if (/Android/i.test(ua) || isMobile) model = '모바일 기기 (세부 모델 미제공)';
+        else if (/Windows|Macintosh|X11|Linux/i.test(ua)) model = '데스크톱 (세부 모델 미제공)';
+        else model = '확인 불가';
+      }
+
+      return {
+        os: String(os).slice(0, 80),
+        model: String(model).slice(0, 100)
+      };
     }
 
     function callBackendJsonp(action, params = {}) {
@@ -910,7 +979,8 @@
 
       const form = document.createElement('form');
       form.method = 'POST';
-      form.action = APPS_SCRIPT_URL;
+      // 신청 POST만 Cloudflare Worker로 보냅니다. IP는 Worker가 Cloudflare 헤더에서 가져옵니다.
+      form.action = CLOUDFLARE_WORKER_URL;
       form.target = frameName;
       form.acceptCharset = 'UTF-8';
       form.enctype = 'application/x-www-form-urlencoded';
