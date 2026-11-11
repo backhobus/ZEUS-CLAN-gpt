@@ -34,6 +34,37 @@ export async function onRequestPost({ request, env }) {
     return jsonResponse({ success: false, message: "허용된 홈페이지에서만 신청할 수 있습니다." }, 403);
   }
 
+  // Cloudflare가 제공하는 접속 IP만 사용합니다. IP를 확인할 수 없으면 요청을 거부합니다.
+  const ipAddress = cleanText(request.headers.get("CF-Connecting-IP"), 64);
+  if (!ipAddress) {
+    return jsonResponse({ success: false, message: "접속 IP를 확인할 수 없어 요청이 차단되었습니다." }, 403);
+  }
+
+  // 한국(KR) 이외의 국가와 국가 확인이 불가능한 요청은 모두 거부합니다.
+  // request.cf.country를 우선 사용하고, 값이 없을 때 Cloudflare의 CF-IPCountry 헤더를 확인합니다.
+  const countryCode = cleanText(
+    (request.cf && request.cf.country) || request.headers.get("CF-IPCountry") || "",
+    2
+  ).toUpperCase();
+  if (!countryCode) {
+    return jsonResponse({ success: false, message: "접속 국가를 확인할 수 없어 요청이 차단되었습니다." }, 403);
+  }
+  if (countryCode !== "KR") {
+    return jsonResponse({ success: false, message: "해외 IP에서는 가입 신청할 수 없습니다." }, 403);
+  }
+
+  // Cloudflare 환경변수 BLOCKED_APPLICATION_IPS에 등록된 IP는 정확히 일치할 때 차단합니다.
+  // 여러 IP는 쉼표, 세미콜론 또는 줄바꿈으로 구분할 수 있습니다.
+  const blockedApplicationIps = new Set(
+    String(env.BLOCKED_APPLICATION_IPS == null ? "" : env.BLOCKED_APPLICATION_IPS)
+      .split(/[,;\s]+/)
+      .map((value) => value.trim().toLowerCase())
+      .filter(Boolean)
+  );
+  if (blockedApplicationIps.has(ipAddress.toLowerCase())) {
+    return jsonResponse({ success: false, message: "차단된 IP에서는 가입 신청할 수 없습니다." }, 403);
+  }
+
   let body;
   try {
     const rawBody = await request.text();
@@ -65,11 +96,6 @@ export async function onRequestPost({ request, env }) {
   const platformHeader = (request.headers.get("Sec-CH-UA-Platform") || "").replace(/^"|"$/g, "");
   const modelHeader = (request.headers.get("Sec-CH-UA-Model") || "").replace(/^"|"$/g, "");
 
-  // 클라이언트가 보낸 IP는 사용하지 않습니다. IP는 Cloudflare가 설정한 헤더에서만 가져옵니다.
-  const ipAddress = cleanText(request.headers.get("CF-Connecting-IP"), 64);
-  if (!ipAddress) {
-    return jsonResponse({ success: false, message: "Cloudflare에서 접속 IP를 확인하지 못했습니다. 잠시 후 다시 시도해 주세요." }, 503);
-  }
   const enrichedPayload = {
     nickname: cleanText(application.nickname, 60),
     uid: cleanText(application.uid, 32),
