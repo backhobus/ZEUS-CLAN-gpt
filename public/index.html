@@ -29,7 +29,7 @@
   <!-- Font Awesome icons for the main menu -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gowun+Batang:wght@400;700&family=Orbitron:wght@500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Noto+Sans+KR:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800&display=swap');
     :root {
       --bg:#08090c; --panel:#111318; --panel-2:#171a20; --gold:#f0d86b;
       --gold-2:#c8a944; --cream:#f3edcf; --muted:#a8a7a0; --line:rgba(240,216,107,.22);
@@ -43,7 +43,7 @@
         radial-gradient(ellipse at 12% 62%, rgba(180,145,54,.09), transparent 34%),
         radial-gradient(ellipse at 87% 78%, rgba(92,104,126,.12), transparent 35%),
         linear-gradient(145deg,#06070a,#0b0d12 54%,#07080b);
-      font-family:'Gowun Batang',serif; overflow-x:hidden; line-height:1.75; word-break:keep-all; overflow-wrap:break-word;
+      font-family:'Noto Sans KR',sans-serif; overflow-x:hidden; line-height:1.75; word-break:keep-all; overflow-wrap:break-word;
     }
     body:before {
       content:""; position:fixed; inset:0; pointer-events:none; opacity:.18; z-index:0;
@@ -85,7 +85,7 @@
       position:relative; min-height:76px; overflow:hidden; border:1px solid rgba(240,216,107,.38); border-radius:13px;
       background:linear-gradient(135deg,rgba(32,31,27,.96),rgba(16,18,23,.96)); color:var(--cream);
       display:flex; align-items:center; justify-content:center; gap:12px; padding:18px 19px; cursor:pointer;
-      font-family:'Gowun Batang',serif; font-size:16px; font-weight:700; letter-spacing:.015em; line-height:1.55; text-align:center;
+      font-family:'Noto Sans KR',sans-serif; font-size:16px; font-weight:700; letter-spacing:.015em; line-height:1.55; text-align:center;
       box-shadow:0 9px 28px rgba(0,0,0,.24); transition:transform .2s,border-color .2s,box-shadow .2s;
     }
     .action:before { content:""; position:absolute; inset:0; background:linear-gradient(110deg,transparent 20%,rgba(255,244,189,.08),transparent 76%); transform:translateX(-110%); transition:transform .65s; }
@@ -137,7 +137,7 @@
     body.form-active { overflow:hidden; }
     body.keyboard-open .shell.is-form #formPanel { overflow-y:auto; overscroll-behavior:contain; -webkit-overflow-scrolling:touch; }
     .hidden { display:none !important; }
-    .back-home { display:inline-flex; align-items:center; gap:8px; padding:8px 0; color:#a9a18a; background:none; border:0; cursor:pointer; font:12px 'Gowun Batang',serif; }
+    .back-home { display:inline-flex; align-items:center; gap:8px; padding:8px 0; color:#a9a18a; background:none; border:0; cursor:pointer; font:12px 'Noto Sans KR',sans-serif; }
     .back-home:hover { color:var(--gold); }
     .panel { width:min(100%,680px); margin:14px auto 0; padding:clamp(22px,5vw,42px); border:1px solid var(--line); border-radius:19px; background:linear-gradient(145deg,rgba(23,25,31,.96),rgba(11,13,17,.97)); box-shadow:var(--shadow); position:relative; overflow:hidden; }
     .panel:before { content:""; position:absolute; top:0; left:12%; right:12%; height:1px; background:linear-gradient(90deg,transparent,var(--gold),transparent); }
@@ -152,21 +152,21 @@
     .question label { display:block; max-width:100%; margin:0 0 14px; color:#e8dfbf; font-size:15px; font-weight:700; line-height:1.8; word-break:keep-all; }
     .field,.field-area {
       width:100%; color:#f2edda; background:#0b0d11; border:1px solid #363740; border-radius:10px; outline:none;
-      padding:16px 17px; font:14px/1.8 'Gowun Batang',serif; transition:border-color .2s,box-shadow .2s; caret-color:var(--gold); word-break:keep-all;
+      padding:16px 17px; font:14px/1.8 'Noto Sans KR',sans-serif; transition:border-color .2s,box-shadow .2s; caret-color:var(--gold); word-break:keep-all;
     }
     .field { min-height:55px; }
     .field-area { min-height:145px; resize:vertical; line-height:1.7; }
     .field::placeholder,.field-area::placeholder { color:#777875; opacity:1; }
     .field:focus,.field-area:focus { border-color:var(--gold-2); box-shadow:0 0 0 3px rgba(211,177,75,.09); }
-    .error { min-height:19px; margin:8px 1px 0; color:var(--red); font-family:Arial,sans-serif; font-size:12px; }
+    .error { min-height:19px; margin:8px 1px 0; color:var(--red); font-family:'Noto Sans KR',sans-serif; font-size:12px; }
     .choice-row { display:grid; grid-template-columns:1fr 1fr; gap:11px; }
-    .choice { min-height:57px; color:#c6c2b0; border:1px solid #44444a; border-radius:10px; background:#0d0f13; font:700 15px 'Gowun Batang',serif; cursor:pointer; transition:.2s; }
+    .choice { min-height:57px; color:#c6c2b0; border:1px solid #44444a; border-radius:10px; background:#0d0f13; font:700 15px 'Noto Sans KR',sans-serif; cursor:pointer; transition:.2s; }
     .choice:hover { border-color:#a58e48; }
     .choice.selected { color:#17150e; border-color:#e8cf70; background:linear-gradient(125deg,#f3df8b,#c6a648); box-shadow:0 5px 20px rgba(208,174,71,.13); }
     .nav-row { display:grid; grid-template-columns:1fr 9fr; gap:10px; margin-top:28px; }
     .nav-row.first-step { grid-template-columns:minmax(0,1fr); }
     .nav-row.review-edit-mode { grid-template-columns:minmax(0,10fr); }
-    .nav-btn,.submit-btn { min-height:53px; border-radius:10px; cursor:pointer; font:700 14px 'Gowun Batang',serif; transition:.2s; }
+    .nav-btn,.submit-btn { min-height:53px; border-radius:10px; cursor:pointer; font:700 14px 'Noto Sans KR',sans-serif; transition:.2s; }
     .nav-btn.prev { color:#a9a493; background:#17191e; border:1px solid #393a40; }
     .nav-btn.prev:disabled { opacity:.38; cursor:not-allowed; }
     .nav-btn.next,.submit-btn { color:#17150d; border:1px solid #e5ca68; background:linear-gradient(110deg,#f2dc80,#c6a348); box-shadow:0 6px 22px rgba(201,166,65,.14); }
@@ -176,7 +176,7 @@
     .review-item { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:13px; align-items:center; padding:16px 0; border-bottom:1px solid rgba(255,255,255,.07); }
     .review-item .label { color:#9a967f; font-size:11px; margin-bottom:6px; }
     .review-item .answer { color:#eee8d4; font-size:13px; line-height:1.65; overflow-wrap:anywhere; white-space:pre-wrap; }
-    .edit-btn { color:var(--gold); background:transparent; border:1px solid rgba(240,216,107,.38); padding:8px 12px; border-radius:8px; font:12px 'Gowun Batang',serif; cursor:pointer; }
+    .edit-btn { color:var(--gold); background:transparent; border:1px solid rgba(240,216,107,.38); padding:8px 12px; border-radius:8px; font:12px 'Noto Sans KR',sans-serif; cursor:pointer; }
     .edit-btn:hover { background:rgba(240,216,107,.1); }
     .submit-btn { width:100%; margin-top:24px; min-height:57px; font-size:16px; }
     .completion { text-align:center; padding:30px 8px 26px; }
@@ -196,7 +196,7 @@
     .gallery-card img { display:block; width:100%; aspect-ratio:4/3; object-fit:cover; }
     .gallery-card p { margin:0; padding:10px; color:#c6bd9e; font-size:11px; overflow-wrap:anywhere; }
     .empty-gallery { min-height:108px; display:flex; align-items:center; justify-content:center; padding:30px 15px; text-align:center; color:#929087; border:1px dashed rgba(240,216,107,.24); border-radius:12px; font-size:13px; line-height:2; word-break:keep-all; }
-    .toast { position:fixed; z-index:20; left:50%; bottom:24px; transform:translate(-50%,20px); opacity:0; pointer-events:none; max-width:calc(100vw - 32px); padding:13px 18px; color:#f6eecf; background:#24252a; border:1px solid rgba(240,216,107,.35); border-radius:10px; box-shadow:var(--shadow); font:12px/1.6 Arial,sans-serif; transition:.25s; text-align:center; }
+    .toast { position:fixed; z-index:20; left:50%; bottom:24px; transform:translate(-50%,20px); opacity:0; pointer-events:none; max-width:calc(100vw - 32px); padding:13px 18px; color:#f6eecf; background:#24252a; border:1px solid rgba(240,216,107,.35); border-radius:10px; box-shadow:var(--shadow); font:12px/1.6 'Noto Sans KR',sans-serif; transition:.25s; text-align:center; }
     .toast.show { transform:translate(-50%,0); opacity:1; }
     .toast.warning { border-color:rgba(255,107,107,.6); }
     .loader { display:inline-block; width:14px; height:14px; border:2px solid rgba(0,0,0,.25); border-top-color:#16140d; border-radius:50%; animation:spin .7s linear infinite; vertical-align:middle; margin-right:8px; }
@@ -516,6 +516,20 @@
       }
     }
 
+    /* iOS keyboard: keep the application shell attached to the visible viewport. */
+    @media (max-width:899px) {
+      .shell.is-form {
+        position:fixed;
+        top:var(--app-viewport-offset-top,0px);
+        left:0;
+        right:0;
+        margin:0 auto;
+        height:var(--app-viewport-height,100svh);
+        min-height:var(--app-viewport-height,100svh);
+        max-height:var(--app-viewport-height,100svh);
+      }
+    }
+
     @media (prefers-reduced-motion:reduce) { *,*:before,*:after { animation-duration:.01ms !important; transition-duration:.01ms !important; scroll-behavior:auto !important; } }
   </style>
 </head>
@@ -730,21 +744,27 @@
       const panelRect = panel.getBoundingClientRect();
       const fieldRect = active.getBoundingClientRect();
       const offset = (fieldRect.top + fieldRect.height / 2) - (panelRect.top + panelRect.height / 2);
-      panel.scrollBy({ top:offset, behavior:'smooth' });
+      if (Math.abs(offset) > 8) panel.scrollBy({ top:offset, behavior:'auto' });
     }
     let applicationBaseViewportHeight = window.innerHeight;
     function syncApplicationViewport() {
       const viewport = window.visualViewport;
       if (!document.body.classList.contains('form-active')) applicationBaseViewportHeight = window.innerHeight;
       const height = viewport ? viewport.height : window.innerHeight;
+      const offsetTop = viewport ? Math.max(0, viewport.offsetTop || 0) : 0;
       document.documentElement.style.setProperty('--app-viewport-height', `${height}px`);
+      document.documentElement.style.setProperty('--app-viewport-offset-top', `${offsetTop}px`);
       const wasKeyboardOpen = document.body.classList.contains('keyboard-open');
       const keyboardOpen = document.body.classList.contains('form-active') && viewport && (applicationBaseViewportHeight - viewport.height > 110 || viewport.height < applicationBaseViewportHeight * .78);
       document.body.classList.toggle('keyboard-open', Boolean(keyboardOpen));
       if (keyboardOpen) requestAnimationFrame(centerFocusedField);
       else if (wasKeyboardOpen) { const panel = $('#formPanel'); if (panel) panel.scrollTop = 0; }
     }
-    if (window.visualViewport) window.visualViewport.addEventListener('resize', syncApplicationViewport);
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener('resize', syncApplicationViewport, { passive:true });
+      window.visualViewport.addEventListener('scroll', syncApplicationViewport, { passive:true });
+    }
+    window.addEventListener('scroll', syncApplicationViewport, { passive:true });
     window.addEventListener('resize', () => {
       const desktopLayout = window.matchMedia('(min-width:900px)').matches;
       const secondaryViewActive = document.body.classList.contains('form-active') || document.body.classList.contains('gallery-active');
