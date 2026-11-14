@@ -165,6 +165,7 @@
     .choice.selected { color:#17150e; border-color:#e8cf70; background:linear-gradient(125deg,#f3df8b,#c6a648); box-shadow:0 5px 20px rgba(208,174,71,.13); }
     .nav-row { display:grid; grid-template-columns:1fr 9fr; gap:10px; margin-top:28px; }
     .nav-row.first-step { grid-template-columns:minmax(0,1fr); }
+    .nav-row.review-edit-mode { grid-template-columns:minmax(0,10fr); }
     .nav-btn,.submit-btn { min-height:53px; border-radius:10px; cursor:pointer; font:700 14px 'Gowun Batang',serif; transition:.2s; }
     .nav-btn.prev { color:#a9a493; background:#17191e; border:1px solid #393a40; }
     .nav-btn.prev:disabled { opacity:.38; cursor:not-allowed; }
@@ -607,6 +608,7 @@
 
     const ZEUS_NAV_KEY = '__zeusClanNavigation';
     let pendingApplicationEditStep = null;
+    let returnToFinalCheckAfterEdit = false;
     function currentZeusNavigation() {
       const nav = history.state;
       return nav && nav[ZEUS_NAV_KEY] === true ? nav : null;
@@ -646,6 +648,7 @@
         pushZeusNavigation('formView', step, step);
       }
       state.step = targetStep;
+      returnToFinalCheckAfterEdit = true;
       state.errors = {};
       state.progressStart = ((targetStep - 1) / 4) * 100;
       persistDraft();
@@ -761,6 +764,7 @@
       toast.timer = setTimeout(() => el.classList.remove('show'), 3300);
     }
     function startApplication() {
+      returnToFinalCheckAfterEdit = false;
       if (!state.hasDraft) {
         state.step = 1;
         state.progressStart = 0;
@@ -798,8 +802,8 @@
           <div class="error" id="fieldError">${escapeHtml(state.errors[q.key] || '')}</div>
           ${q.helper ? `<p class="description">${q.helper}</p>` : ''}
         </div>
-        <div class="nav-row ${state.step===1?'first-step':''}">
-          ${state.step > 1 ? '<button class="nav-btn prev" id="prevButton" type="button">이전</button>' : ''}
+        <div class="nav-row ${returnToFinalCheckAfterEdit ? 'review-edit-mode' : (state.step===1 ? 'first-step' : '')}">
+          ${!returnToFinalCheckAfterEdit && state.step > 1 ? '<button class="nav-btn prev" id="prevButton" type="button">이전</button>' : ''}
           <button class="nav-btn next" id="nextButton" type="button">다음</button>
         </div>`;
       animatePanel(panel);
@@ -878,7 +882,12 @@
         if (error) error.textContent = state.errors[questionMeta[state.step-1].key];
         return;
       }
-      state.step++;
+      if (returnToFinalCheckAfterEdit) {
+        state.step = 6;
+        returnToFinalCheckAfterEdit = false;
+      } else {
+        state.step++;
+      }
       persistDraft();
       const currentNav = currentZeusNavigation();
       const nextDepth = currentNav && currentNav.view === 'formView' ? (Number(currentNav.depth) || 1) + 1 : 1;
